@@ -20,7 +20,7 @@ def read_all():
 
     # Serialize the data for the response
     person_schema = PersonSchema(many=True)
-    data = person_schema.dump(people).data
+    data = person_schema.dump(people)
     return data
 
 
@@ -44,7 +44,7 @@ def read_one(person_id):
 
         # Serialize the data for the response
         person_schema = PersonSchema()
-        data = person_schema.dump(person).data
+        data = person_schema.dump(person)
         return data
 
     # Otherwise, nope, didn't find that person
@@ -81,7 +81,7 @@ def create(person):
         db.session.commit()
 
         # Serialize and return the newly created person in the response
-        data = schema.dump(new_person).data
+        data = schema.dump(new_person)
 
         return data, 201
 
@@ -98,6 +98,10 @@ def update(person_id, person):
     :param person:      person to update
     :return:            updated person structure
     """
+
+    fname = person.get("fname")
+    lname = person.get("lname")
+
     # Get the person requested from the db into session
     update_person = Person.query.filter(
         Person.person_id == person_id
@@ -118,7 +122,7 @@ def update(person_id, person):
         db.session.commit()
 
         # return updated person in the response
-        data = schema.dump(update_person).data
+        data = schema.dump(update_person)
 
         return data, 200
 
